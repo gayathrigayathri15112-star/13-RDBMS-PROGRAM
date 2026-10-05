@@ -1,0 +1,41 @@
+name: RDBMS Autograding - 3NF Normalization
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  autograding:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install MySQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-server
+
+      - name: Start MySQL
+        run: |
+          sudo systemctl start mysql
+          sudo systemctl status mysql --no-pager
+
+      - name: Check MySQL
+        run: |
+          sudo mysql -e "SELECT VERSION();"
+
+      - name: Run Starter SQL
+        run: |
+          sudo mysql < starter.sql
+
+      - name: Run Solution SQL
+        run: |
+          sudo mysql < solution.sql
+
+      - name: Run Automated Tests
+        run: |
+          sudo mysql < test.sql
